@@ -5,20 +5,13 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Separator } from "@/components/ui/separator";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 
 import { Component as ExampleChart } from "@/components/example-chart";
 
 import { ChartAreaInteractive as AreaChart } from "@/components/ex-chart/ex01area"
 import { ChartBarMultiple as BarChart} from "@/components/ex-chart/ex02bar"
 import { ChartLineMultiple as LineChart} from "@/components/ex-chart/ex03line"
+import { ChartBarMixed as MixedExsample} from "@/components/ex-chart/ex04mixed"
 
 export default function Home() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
@@ -47,7 +40,6 @@ export default function Home() {
         <AreaChart />
       </div>
 
-      <Separator className="w-full" />
 
       <div className="w-full max w 3xl">
         <h2 className="text-xl font-semibold mb-2">棒グラフ例</h2>
@@ -59,6 +51,11 @@ export default function Home() {
       <div className="w-full max w 3xl">
         <h2 className="text-xl font-semibold mb-2">棒グラフ例</h2>
         <LineChart />
+      </div>
+
+      <div className="w-full max w 3xl">
+        <h2 className="text-xl font-semibold mb-2">その他例1</h2>
+        <MixedExsample />
       </div>
 
       {/* <Sheet>
