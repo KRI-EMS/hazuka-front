@@ -11,7 +11,8 @@ import { Component as ExampleChart } from "@/components/example-chart";
 import { ChartAreaInteractive as AreaChart } from "@/components/ex-chart/ex01area"
 import { ChartBarMultiple as BarChart} from "@/components/ex-chart/ex02bar"
 import { ChartLineMultiple as LineChart} from "@/components/ex-chart/ex03line"
-import { ChartBarMixed as MixedExsample} from "@/components/ex-chart/ex04mixed"
+import { ChartMixedBarLine as MixedExsample} from "@/components/ex-chart/ex04mixed"
+import { ChartPieLabelList as PieChart } from "@/components/ex-chart/ex05pie";
 
 export default function Home() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
@@ -56,6 +57,11 @@ export default function Home() {
       <div className="w-full max w 3xl">
         <h2 className="text-xl font-semibold mb-2">その他例1</h2>
         <MixedExsample />
+      </div>
+
+      <div className="w-full max w 3xl">
+        <h2 className="text-xl font-semibold mb-2">円グラフ例</h2>
+        <PieChart />
       </div>
 
       {/* <Sheet>
