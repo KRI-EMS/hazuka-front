@@ -1,81 +1,58 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Separator } from "@/components/ui/separator";
-
-import { Component as ExampleChart } from "@/components/example-chart";
-
-import { ChartAreaInteractive as AreaChart } from "@/components/ex-chart/ex01area"
-import { ChartBarMultiple as BarChart} from "@/components/ex-chart/ex02bar"
-import { ChartLineMultiple as LineChart} from "@/components/ex-chart/ex03line"
-import { ChartMixedBarLine as MixedExsample} from "@/components/ex-chart/ex04mixed"
+import { ChartAreaInteractive as AreaChart } from "@/components/ex-chart/ex01area";
+import { ChartBarMultiple as BarChart } from "@/components/ex-chart/ex02bar";
+import { ChartLineMultiple as LineChart } from "@/components/ex-chart/ex03line";
+import { ChartMixedBarLine as MixedExample } from "@/components/ex-chart/ex04mixed";
 import { ChartPieLabelList as PieChart } from "@/components/ex-chart/ex05pie";
 
+const slides = [
+  {
+    title: "面グラフ例",
+    component: <AreaChart />,
+  },
+  {
+    title: "棒グラフ例",
+    component: <BarChart />,
+  },
+  {
+    title: "折れ線グラフ例",
+    component: <LineChart />,
+  },
+  {
+    title: "その他例1",
+    component: <MixedExample />,
+  },
+  {
+    title: "円グラフ例",
+    component: <PieChart />,
+  },
+];
+
 export default function Home() {
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-12 space-y-8">
-      {/* <Button>Click</Button> */}
-
-      <div className="w-full max-w-3xl">
-        <h2 className="text-xl font-semibold mb-2">チャート例</h2>
-        <ExampleChart />
+    <main className="flex items-center justify-center min-h-screen bg-black p-4">
+      <div className="w-full max-w-screen-xl bg-white rounded-2xl shadow-lg p-6 flex flex-col justify-start min-h-[450px]">
+        <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+          {slides[index].title}
+        </h2>
+        <div key={index} className="flex-grow flex items-center justify-center">
+          <div className="w-full h-full">
+            {slides[index].component}
+          </div>
+        </div>
       </div>
-
-
-      <Separator className="w-full" />
-
-      {/* <Calendar
-        mode="single"
-        selected={date}
-        onSelect={setDate}
-        className="rounded-md border"
-      /> */}
-
-      <div className="w-full max w 3xl">
-        <h2 className="text-xl font-semibold mb-2">面グラフ例</h2>
-        <AreaChart />
-      </div>
-
-
-      <div className="w-full max w 3xl">
-        <h2 className="text-xl font-semibold mb-2">棒グラフ例</h2>
-        <BarChart />
-      </div>
-
-      <Separator className="w-full" />
-
-      <div className="w-full max w 3xl">
-        <h2 className="text-xl font-semibold mb-2">棒グラフ例</h2>
-        <LineChart />
-      </div>
-
-      <div className="w-full max w 3xl">
-        <h2 className="text-xl font-semibold mb-2">その他例1</h2>
-        <MixedExsample />
-      </div>
-
-      <div className="w-full max w 3xl">
-        <h2 className="text-xl font-semibold mb-2">円グラフ例</h2>
-        <PieChart />
-      </div>
-
-      {/* <Sheet>
-        <SheetTrigger>Open</SheetTrigger>
-        <SheetContent>
-          <SheetHeader>
-            <SheetTitle>Are you absolutely sure?</SheetTitle>
-            <SheetDescription>
-              This action cannot be undone. This will permanently delete your account
-              and remove your data from our servers.
-            </SheetDescription>
-          </SheetHeader>
-        </SheetContent>
-      </Sheet> */}
     </main>
   );
 }
