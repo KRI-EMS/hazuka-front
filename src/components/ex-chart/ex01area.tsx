@@ -3,6 +3,8 @@
 import * as React from "react"
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
 
+import { exData } from "@/data/exdata";
+
 import {
   Card,
   CardContent,
