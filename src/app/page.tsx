@@ -65,10 +65,18 @@ export default function Home() {
         </div>
 
         <div className="flex-grow p-6 flex flex-col justify-start">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+        <AnimatePresence mode="wait">
+          <motion.h2
+            key={index}
+            initial={{ opacity: 0, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="text-2xl font-semibold mb-4 text-gray-800"
+          >
             {slides[index].title}
-          </h2>
-
+          </motion.h2>
+        </AnimatePresence>
           <div className="relative flex-grow flex flex-col items-center justify-center space-y-6">
             <AnimatePresence mode="wait">
               <motion.div
@@ -82,19 +90,26 @@ export default function Home() {
                 {slides[index].component}
               </motion.div>
             </AnimatePresence>
-
             <div className="w-full max-w-md bg-white border rounded-lg shadow p-4 mr-auto">
-              <div className="text-sm font-medium text-muted-foreground">
-                {index === 0 ? "今月の総電力消費量" : "今日の総電力消費量"}
-              </div>
-              <div className="text-2xl font-bold mt-1">
-                {index === 0 ? "42,710 kWh" : "2,170 kWh"}
-              </div>
-              <div className="text-xs text-muted-foreground mt-1">
-                {index === 0
-                  ? "+8.2% 前月比"
-                  : "+5.4% 昨日比"}
-              </div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 0 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 0 }}
+                  transition={{ duration: 0.8 }}
+                >
+                  <div className="text-sm font-medium text-muted-foreground">
+                    {index === 0 ? "今月の総電力消費量" : "今日の総電力消費量"}
+                  </div>
+                  <div className="text-2xl font-bold mt-1">
+                    {index === 0 ? "42,710 kWh" : "2,170 kWh"}
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    {index === 0 ? "+8.2% 前月比" : "+5.4% 昨日比"}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
         </div>
