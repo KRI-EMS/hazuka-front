@@ -66,15 +66,15 @@ const chartData = exChartData.map((d) => ({
 
 const chartConfig = {
   current: {
-    label: "Current",
+    label: "今月",
     color: "#60a5fa",
   },
   previous: {
-    label: "Previous",
+    label: "前月",
     color: "#2563eb",
   },
   ratio: {
-    label: "Ratio",
+    label: "前月比",
     color: "#f97316"
   },
 } satisfies ChartConfig

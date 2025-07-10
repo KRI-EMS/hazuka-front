@@ -40,15 +40,15 @@ const hourlyChartData = Array.from({ length: 24 }, (_, hour) => {
 
 const chartConfig = {
   today: {
-    label: "Today",
+    label: "今日",
     color: "#60a5fa",
   },
   yesterday: {
-    label: "Yesterday",
+    label: "前日",
     color: "#2563eb",
   },
   ratio: {
-    label: "Ratio",
+    label: "前日比",
     color: "#f97316"
   },
 } satisfies ChartConfig

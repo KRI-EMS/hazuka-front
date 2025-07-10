@@ -108,7 +108,7 @@ export default function Home() {
                     {index === 0 ? "42,710 kWh" : "2,170 kWh"}
                   </div>
                   <div className="text-xs text-muted-foreground mt-1">
-                    {index === 0 ? "+8.2% 前月比" : "+5.4% 昨日比"}
+                    {index === 0 ? "+8.2% 前月比" : "+5.4% 前日比"}
                   </div>
                 </motion.div>
               </AnimatePresence>
