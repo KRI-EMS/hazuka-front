@@ -59,8 +59,7 @@ export default function Home() {
 
   return (
     <main className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="w-full max-w-screen-xl aspect-video bg-white shadow-lg flex flex-col overflow-hidden">
-        
+      <div className="w-full max-w-screen-xl aspect-video bg-gradient-to-b from-white to-blue-50 shadow-lg flex flex-col overflow-hidden">
         <div className="bg-blue-400 text-white px-6 py-3 flex justify-between items-center">
           <span className="text-lg font-bold">Energy Management System</span>
           <span className="text-sm font-medium">{formatDate(time)}</span>

@@ -70,6 +70,7 @@ export function ChartMixedDay() {
               axisLine={false}
               tickMargin={8}
               minTickGap={12}
+              interval={1}
             />
 
             <YAxis
@@ -80,6 +81,7 @@ export function ChartMixedDay() {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
+              width={76}
             />
 
             <YAxis

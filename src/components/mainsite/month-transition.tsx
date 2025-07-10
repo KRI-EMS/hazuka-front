@@ -113,6 +113,7 @@ export function ChartMixedMonth() {
                   day: "numeric",
                 })
               }}
+              interval={2}
             />
             <YAxis
                 yAxisId={1}
