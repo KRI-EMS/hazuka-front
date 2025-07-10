@@ -3,18 +3,29 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+// お試しで作ったグラフ
 import { ChartAreaInteractive as AreaChart } from "@/components/ex-chart/ex01area";
 import { ChartBarMultiple as BarChart } from "@/components/ex-chart/ex02bar";
 import { ChartLineMultiple as LineChart } from "@/components/ex-chart/ex03line";
 import { ChartMixedBarLine as MixedExample } from "@/components/ex-chart/ex04mixed";
 import { ChartPieLabelList as PieChart } from "@/components/ex-chart/ex05pie";
 
+// 本番使用グラフ
+import { ChartMixedMonth as TransitionMonth } from "@/components/mainsite/month-transition";
+import { ChartMixedDay as TransitionDay } from "@/components/mainsite/day-trantision";
+
+// 使用例
+// const slides = [
+//   { title: "面グラフ例", component: <AreaChart /> },
+//   { title: "棒グラフ例", component: <BarChart /> },
+//   { title: "折れ線グラフ例", component: <LineChart /> },
+//   { title: "その他例1", component: <MixedExample /> },
+//   { title: "円グラフ例", component: <PieChart /> },
+// ];
+
 const slides = [
-  { title: "面グラフ例", component: <AreaChart /> },
-  { title: "棒グラフ例", component: <BarChart /> },
-  { title: "折れ線グラフ例", component: <LineChart /> },
-  { title: "その他例1", component: <MixedExample /> },
-  { title: "円グラフ例", component: <PieChart /> },
+  { title: "今月の14号館全体の電力使用量", component: <TransitionMonth /> },
+  { title: "今日の14号館全体の電力使用量", component: <TransitionDay />},
 ];
 
 export default function Home() {
@@ -58,7 +69,7 @@ export default function Home() {
             {slides[index].title}
           </h2>
 
-          <div className="relative flex-grow flex items-center justify-center">
+          <div className="relative flex-grow flex flex-col items-center justify-center space-y-6">
             <AnimatePresence mode="wait">
               <motion.div
                 key={index}
@@ -66,11 +77,25 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -30 }}
                 transition={{ duration: 0.6 }}
-                className="absolute w-full h-full"
+                className="w-full"
               >
                 {slides[index].component}
               </motion.div>
             </AnimatePresence>
+
+            <div className="w-full max-w-md bg-white border rounded-lg shadow p-4 mr-auto">
+              <div className="text-sm font-medium text-muted-foreground">
+                {index === 0 ? "今月の総電力消費量" : "今日の総電力消費量"}
+              </div>
+              <div className="text-2xl font-bold mt-1">
+                {index === 0 ? "42,710 kWh" : "2,170 kWh"}
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">
+                {index === 0
+                  ? "+8.2% 前月比"
+                  : "+5.4% 昨日比"}
+              </div>
+            </div>
           </div>
         </div>
       </div>
