@@ -13,6 +13,7 @@ import { ChartPieLabelList as PieChart } from "@/components/ex-chart/ex05pie";
 // 本番使用グラフ
 import { ChartMixedMonth as TransitionMonth } from "@/components/mainsite/month-transition";
 import { ChartMixedDay as TransitionDay } from "@/components/mainsite/day-trantision";
+import { ComparisonByFloor as PieChartFloor } from "@/components/mainsite/floor-compared";
 
 // 使用例
 // const slides = [
@@ -24,8 +25,9 @@ import { ChartMixedDay as TransitionDay } from "@/components/mainsite/day-tranti
 // ];
 
 const slides = [
-  { title: "今月の14号館全体の電力使用量", component: <TransitionMonth /> },
-  { title: "今日の14号館全体の電力使用量", component: <TransitionDay />},
+  { title: "今月の14号館全体の消費電力量", component: <TransitionMonth /> },
+  { title: "今日の14号館全体の消費電力量", component: <TransitionDay />},
+  { title: "各階の消費電力量の割合", component: <PieChartFloor />},
 ];
 
 export default function Home() {
@@ -85,7 +87,7 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -30 }}
                 transition={{ duration: 0.6 }}
-                className="w-full"
+                className={`w-full ${index === 2 ? "max-w-lg mr-auto" : ""}`}
               >
                 {slides[index].component}
               </motion.div>
@@ -100,7 +102,7 @@ export default function Home() {
                   transition={{ duration: 0.8 }}
                 >
                   <div className="text-sm font-medium text-muted-foreground">
-                    {index === 0 ? "今月の総電力消費量" : "今日の総電力消費量"}
+                    {index === 0 ? "今月の総消費電力量" : "今日の総消費電力量"}
                   </div>
                   <div className="text-2xl font-bold mt-1">
                     {index === 0 ? "42,710 kWh" : "2,170 kWh"}
