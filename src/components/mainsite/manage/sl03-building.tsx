@@ -1,3 +1,5 @@
+// 制作中止、画像アニメーション作成時再開or参考に
+
 import BuildingViewer from "@/components/mainsite/building-viewer";
 import { ComparisonByFloor } from "@/components/mainsite/floor-compared";
 
