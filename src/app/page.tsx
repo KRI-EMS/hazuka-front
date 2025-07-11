@@ -2,36 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { slides as slideData } from "@/data/slides";
 
-// お試しで作ったグラフ
-import { ChartAreaInteractive as AreaChart } from "@/components/ex-chart/ex01area";
-import { ChartBarMultiple as BarChart } from "@/components/ex-chart/ex02bar";
-import { ChartLineMultiple as LineChart } from "@/components/ex-chart/ex03line";
-import { ChartMixedBarLine as MixedExample } from "@/components/ex-chart/ex04mixed";
-import { ChartPieLabelList as PieChart } from "@/components/ex-chart/ex05pie";
-
-// 本番使用グラフ
-import { ChartMixedMonth as TransitionMonth } from "@/components/mainsite/month-transition";
-import { ChartMixedDay as TransitionDay } from "@/components/mainsite/day-trantision";
-import { ComparisonByFloor as PieChartFloor } from "@/components/mainsite/floor-compared";
-
-// 使用例
-// const slides = [
-//   { title: "面グラフ例", component: <AreaChart /> },
-//   { title: "棒グラフ例", component: <BarChart /> },
-//   { title: "折れ線グラフ例", component: <LineChart /> },
-//   { title: "その他例1", component: <MixedExample /> },
-//   { title: "円グラフ例", component: <PieChart /> },
-// ];
-
-const slides = [
-  { title: "今月の14号館全体の消費電力量", component: <TransitionMonth /> },
-  { title: "今日の14号館全体の消費電力量", component: <TransitionDay />},
-  { title: "各階の消費電力量の割合", component: <PieChartFloor />},
-];
+import Sl01 from "@/components/mainsite/manage/sl01-defcharts";
+import Sl03 from "@/components/mainsite/manage/sl03-building";
 
 export default function Home() {
-  const [index, setIndex] = useState(0);
+  type SlideIndex = 0 | 1 | 2 | "transition";
+  const [index, setIndex] = useState<SlideIndex>(0);
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -43,10 +21,20 @@ export default function Home() {
 
   useEffect(() => {
     const slideTimer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % slides.length);
+      if (index === 1) {
+        setIndex("transition");
+        setTimeout(() => {
+          setIndex(2);
+        }, 100); // 中継スライド 100ms
+      } else if (index === 2) {
+        setIndex(0);
+      } else if (typeof index === "number") {
+        setIndex(((index + 1) % 3) as SlideIndex);
+
+      }
     }, 10000);
     return () => clearInterval(slideTimer);
-  }, []);
+  }, [index]);
 
   const formatDate = (date: Date) => {
     const yyyy = date.getFullYear();
@@ -60,59 +48,46 @@ export default function Home() {
   return (
     <main className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="w-full max-w-screen-xl aspect-video bg-gradient-to-b from-white to-blue-50 shadow-lg flex flex-col overflow-hidden">
+        {/* ヘッダー */}
         <div className="bg-blue-400 text-white px-6 py-3 flex justify-between items-center">
           <span className="text-lg font-bold">Energy Management System</span>
           <span className="text-sm font-medium">{formatDate(time)}</span>
         </div>
 
+        {/* メイン */}
         <div className="flex-grow p-6 flex flex-col justify-start">
-        <AnimatePresence mode="wait">
-          <motion.h2
-            key={index}
-            initial={{ opacity: 0, y: 0 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="text-2xl font-semibold mb-4 text-gray-800"
-          >
-            {slides[index].title}
-          </motion.h2>
-        </AnimatePresence>
-          <div className="relative flex-grow flex flex-col items-center justify-center space-y-6">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -30 }}
-                transition={{ duration: 0.6 }}
-                className={`w-full ${index === 2 ? "max-w-lg mr-auto" : ""}`}
-              >
-                {slides[index].component}
-              </motion.div>
-            </AnimatePresence>
-            <div className="w-full max-w-md bg-white border rounded-lg shadow p-4 mr-auto">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 0 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 0 }}
-                  transition={{ duration: 0.8 }}
-                >
-                  <div className="text-sm font-medium text-muted-foreground">
-                    {index === 0 ? "今月の総消費電力量" : "今日の総消費電力量"}
-                  </div>
-                  <div className="text-2xl font-bold mt-1">
-                    {index === 0 ? "42,710 kWh" : "2,170 kWh"}
-                  </div>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    {index === 0 ? "+8.2% 前月比" : "+5.4% 前日比"}
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
+          {/* タイトル */}
+          <AnimatePresence mode="wait">
+            <motion.h2
+              key={index}
+              initial={{ opacity: 0, y: 0 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 0 }}
+              transition={{ duration: 0.7 }}
+              className="text-2xl font-semibold mb-4 text-gray-800"
+            >
+              {index === 0 && slideData[0].title}
+              {index === 1 && slideData[1].title}
+              {index === 2 && slideData[2].title}
+            </motion.h2>
+          </AnimatePresence>
+
+          {/* スライド表示 */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={index}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6 }}
+              className="relative flex-grow flex flex-col items-center justify-center space-y-6"
+            >
+              {index === 0 && <Sl01 index={0} />}
+              {index === 1 && <Sl01 index={1} />}
+              {index === 2 && <Sl03 />}
+              {index === "transition" && null}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </main>
