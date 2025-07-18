@@ -1,40 +1,56 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { slides as slideData } from "@/data/slides";
 
 import Sl01 from "@/components/mainsite/manage/sl01-defcharts";
 import Sl03 from "@/components/mainsite/manage/sl03-building";
 
+type SlideIndex = 0 | 1 | 2 | "transition";
+
 export default function Home() {
-  type SlideIndex = 0 | 1 | 2 | "transition";
   const [index, setIndex] = useState<SlideIndex>(0);
   const [time, setTime] = useState(new Date());
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTime(new Date());
-    }, 1000);
+    const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
   useEffect(() => {
-    const slideTimer = setInterval(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    // スライド表示時間
+    let displayDuration = 10000;
+
+    if (index === 2) {
+      displayDuration = 15000;
+    }
+
+    // memo:transition用に別途短時間（100ms）を入れたい場合はここで分ける処理を書く
+
+    timeoutRef.current = setTimeout(() => {
       if (index === 1) {
         setIndex("transition");
         setTimeout(() => {
           setIndex(2);
-        }, 100); // 中継スライド 100ms
+        }, 100); // transition
       } else if (index === 2) {
         setIndex(0);
       } else if (typeof index === "number") {
         setIndex(((index + 1) % 3) as SlideIndex);
-
       }
-    }, 10000);
-    return () => clearInterval(slideTimer);
+    }, displayDuration);
+
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, [index]);
+
 
   const formatDate = (date: Date) => {
     const yyyy = date.getFullYear();
