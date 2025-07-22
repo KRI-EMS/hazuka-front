@@ -2,28 +2,40 @@
 
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function BuildingViewer() {
-  const [svgUrl, setSvgUrl] = useState<string>("");
+  const svgList = [
+    "/floors/floor001.svg",
+    "/floors/floor002.svg",
+    "/floors/floor003.svg",
+    "/floors/floor004.svg",
+    "/floors/floor005.svg",
+    "/floors/floor006.svg",
+    "/floors/floor007.svg",
+  ];
+
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    // public フォルダ内のファイルにアクセスする場合は、/から始めます
-    setSvgUrl("/floors/floor001.svg");
-  }, []);
+    if (index >= svgList.length - 1) return;
+
+    const timer = setTimeout(() => {
+      setIndex((prev) => prev + 1);
+    }, 5000); 
+
+    return () => clearTimeout(timer);
+  }, [index]);
+
+  const currentSvg = svgList[index];
 
   return (
     <div className="w-full h-full flex items-center justify-center p-4">
-      {svgUrl ? (
-        <img
-          src={svgUrl}
-          alt="Floor 001"
-          className="w-[600px] h-auto object-contain"
-        />
-      ) : (
-        <div>読み込み中...</div>
-      )}
+      <img
+        src={currentSvg}
+        alt={`Floor ${index + 1}`}
+        className="w-[600px] h-auto object-contain"
+      />
     </div>
   );
 }

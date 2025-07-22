@@ -28,7 +28,7 @@ export default function Home() {
     let displayDuration = 10000;
 
     if (index === 2) {
-      displayDuration = 15000;
+      displayDuration = 35000;
     }
 
     // memo:transition用に別途短時間（100ms）を入れたい場合はここで分ける処理を書く
