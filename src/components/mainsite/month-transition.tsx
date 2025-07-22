@@ -1,4 +1,5 @@
 // 接続テストにつき改修中
+// 総消費電力量について、今月のトータルに当たるキーが不明のため未実装
 "use client"
 import { useEffect, useState } from "react"
 
@@ -56,7 +57,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-// グラフ例として使ったデータ、必要がなくなれば削除
+// グラフ例として使った固定データ、必要がなくなれば削除
 // const exChartData = [
 //     { date: "2024-04-01", current: 1420, previous: 1240 },
 //     { date: "2024-04-02", current: 1390, previous: 1195 },
@@ -151,95 +152,109 @@ export function ChartMixedMonth() {
   }, []);
 
   return (
-    <Card className="pt-0">
-      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        <ChartContainer
-          config={chartConfig}
-          className="aspect-auto h-[350px] w-full"
-        >
-          <ComposedChart data={chartData}>
-            <defs>
-              <linearGradient id="fillCurrent" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-current)" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="var(--color-current)" stopOpacity={0.1} />
-              </linearGradient>
-              <linearGradient id="fillPrevious" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-previous)" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="var(--color-previous)" stopOpacity={0.1} />
-              </linearGradient>
-            </defs>
+    <>
+      <Card className="pt-0">
+        <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+          <ChartContainer
+            config={chartConfig}
+            className="aspect-auto h-[350px] w-full"
+          >
+            <ComposedChart data={chartData}>
+              <defs>
+                <linearGradient id="fillCurrent" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="var(--color-current)" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="var(--color-current)" stopOpacity={0.1} />
+                </linearGradient>
+                <linearGradient id="fillPrevious" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="var(--color-previous)" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="var(--color-previous)" stopOpacity={0.1} />
+                </linearGradient>
+              </defs>
 
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              minTickGap={32}
-              tickFormatter={(value) => {
-                const date = new Date(value)
-                return date.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                })
-              }}
-              interval={2}
-            />
-            <YAxis
-                yAxisId={1}
-                domain={[0, 2000]}
-                ticks={[0, 500, 1000, 1500, 2000]}
-                tickFormatter={(value) => `${value} kWh`}
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="date"
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
-                width={76}
-            />
-            <YAxis
+                minTickGap={32}
+                tickFormatter={(value) => {
+                  const date = new Date(value)
+                  return date.toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  })
+                }}
+                interval={2}
+              />
+              <YAxis
+                  yAxisId={1}
+                  domain={[0, 2000]}
+                  ticks={[0, 500, 1000, 1500, 2000]}
+                  tickFormatter={(value) => `${value} kWh`}
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  width={76}
+              />
+              <YAxis
+                  yAxisId={2}
+                  orientation="right"
+                  domain={[-0.2, 0.2]}
+                  ticks={[-0.2, -0.1, 0, 0.1, 0.2]}
+                  tickFormatter={(v) => `${(v * 100).toFixed(0)}%`}
+                  axisLine={false}
+                  tickLine={false}
+                  tickMargin={8}
+              />
+
+
+              <ChartTooltip
+                cursor={false}
+                content={
+                  <ChartTooltipContent
+                    labelFormatter={(value) => {
+                      return new Date(value).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      })
+                    }}
+                    indicator="dot"
+                  />
+                }
+              />
+
+              {/* Bars */}
+              <Bar yAxisId={1} dataKey="current" fill="var(--color-current)" radius={4} />
+              <Bar yAxisId={1} dataKey="previous" fill="var(--color-previous)" radius={4} />
+
+              {/* Line for current values */}
+              <Line
                 yAxisId={2}
-                orientation="right"
-                domain={[-0.2, 0.2]}
-                ticks={[-0.2, -0.1, 0, 0.1, 0.2]}
-                tickFormatter={(v) => `${(v * 100).toFixed(0)}%`}
-                axisLine={false}
-                tickLine={false}
-                tickMargin={8}
-            />
+                type="linear"
+                dataKey="ratio"
+                stroke="#f97316"
+                strokeWidth={2}
+                dot={false}
+              />
 
+              <ChartLegend content={<ChartLegendContent />} />
+            </ComposedChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
 
-            <ChartTooltip
-              cursor={false}
-              content={
-                <ChartTooltipContent
-                  labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                    })
-                  }}
-                  indicator="dot"
-                />
-              }
-            />
-
-            {/* Bars */}
-            <Bar yAxisId={1} dataKey="current" fill="var(--color-current)" radius={4} />
-            <Bar yAxisId={1} dataKey="previous" fill="var(--color-previous)" radius={4} />
-
-            {/* Line for current values */}
-            <Line
-              yAxisId={2}
-              type="linear"
-              dataKey="ratio"
-              stroke="#f97316"
-              strokeWidth={2}
-              dot={false}
-            />
-
-            <ChartLegend content={<ChartLegendContent />} />
-          </ComposedChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
+      <div className="w-[470px] bg-white border rounded-lg shadow p-4 mt-4 mr-auto">
+        <div className="text-sm font-medium text-muted-foreground">
+          今月の総消費電力量
+        </div>
+        <div className="text-2xl font-bold mt-1">
+          0 kWh
+        </div>
+        <div className="text-xs text-muted-foreground mt-1">
+          0.0% 前月比
+        </div>
+      </div>
+    </>
   )
 }
