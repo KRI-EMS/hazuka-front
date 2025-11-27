@@ -3,6 +3,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function BuildingViewer() {
   const svgList = [
@@ -31,11 +32,18 @@ export default function BuildingViewer() {
 
   return (
     <div className="w-full h-full flex items-center justify-center p-4">
-      <img
-        src={currentSvg}
-        alt={`Floor ${index + 1}`}
-        className="w-[600px] h-auto object-contain"
-      />
+      <AnimatePresence mode="wait">
+        <motion.img
+            key={currentSvg}
+            src={currentSvg}
+            alt={`Floor ${index + 1}`}
+            className="w-[600px] h-auto object-contain"
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 50, opacity: 0.2 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}        
+        />
+      </AnimatePresence>
     </div>
   );
 }

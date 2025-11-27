@@ -1,49 +1,23 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import { useParams } from "next/navigation";
+import Image from "next/image";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { slides as slideData } from "@/data/slides";
-
 import Sl01 from "@/components/mainsite/manage/sl01-defcharts";
+import Sl03 from "@/components/mainsite/manage/sl03-building";
 
-type SlideIndex = 0 | 1;
+export default function FloorPage() {
+  const params = useParams();
+  const floor = Number(params.id);
 
-export default function Home() {
-  const [index, setIndex] = useState<SlideIndex>(0);
   const [time, setTime] = useState(new Date());
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [index, setIndex] = useState(0);
 
-  // 設定ページのスライド表示時間（秒）
-  const [intervalSec, setIntervalSec] = useState<number>(10);
-
-  // localStorageから読み込み
-  useEffect(() => {
-    const saved = localStorage.getItem("slideInterval");
-    if (saved) setIntervalSec(Number(saved));
-  }, []);
-
-  // 時刻更新
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
-
-  // スライド切り替え
-  useEffect(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    const displayDuration = intervalSec * 1000; // 設定値で動く
-
-    timeoutRef.current = setTimeout(() => {
-      setIndex((prev) => (prev === 0 ? 1 : 0));
-    }, displayDuration);
-
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, [index, intervalSec]);
 
   const formatDate = (date: Date) => {
     const yyyy = date.getFullYear();
@@ -54,18 +28,31 @@ export default function Home() {
     return `${yyyy}/${mm}/${dd} ${hh}:${mi}`;
   };
 
+  // スライド構成：各階に応じて表示を切り替えることも可能
+  const slides = [
+    { id: 0, component: <Sl01 index={0} />, title: `Floor ${floor} - Energy` },
+    { id: 1, component: <Sl03 />, title: `Floor ${floor} - Building Status` },
+  ];
+
+  // 5秒ごとに切り替え
+  useEffect(() => {
+    const t = setInterval(() => setIndex((prev) => (prev + 1) % slides.length), 10000);
+    return () => clearInterval(t);
+  }, []);
+
   return (
     <main className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="w-full max-w-screen-xl aspect-video bg-gradient-to-b from-white to-blue-50 shadow-lg flex flex-col overflow-hidden">
-        {/* ヘッダー */}
-        <div className="bg-blue-400 text-white px-6 py-3 flex justify-between items-center">
-          <span className="text-lg font-bold">Energy Management System</span>
+        {/* Header */}
+        <div className="bg-blue-500 text-white px-6 py-3 flex justify-between items-center">
+          <span className="text-lg font-bold">
+            Energy Management System - Floor {floor}
+          </span>
           <span className="text-sm font-medium">{formatDate(time)}</span>
         </div>
 
-        {/* メイン */}
+        {/* Main */}
         <div className="flex-grow p-6 flex flex-col justify-start">
-          {/* タイトル */}
           <AnimatePresence mode="wait">
             <motion.h2
               key={index}
@@ -75,11 +62,10 @@ export default function Home() {
               transition={{ duration: 0.7 }}
               className="text-2xl font-semibold mb-4 text-gray-800"
             >
-              {slideData[index].title}
+              {slides[index].title}
             </motion.h2>
           </AnimatePresence>
 
-          {/* スライド本体 */}
           <AnimatePresence mode="wait">
             <motion.div
               key={index}
@@ -87,9 +73,9 @@ export default function Home() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.6 }}
-              className="relative flex-grow flex flex-col items-center justify-center space-y-6"
+              className="relative flex-grow flex flex-col items-center justify-center"
             >
-              <Sl01 index={index} />
+              {slides[index].component}
             </motion.div>
           </AnimatePresence>
         </div>
