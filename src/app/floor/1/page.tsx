@@ -7,10 +7,17 @@ import GridPanel from "@/components/mainsite/layout_v1.2/gridpanel";
 import TwoCharts from "@/components/mainsite/layout_v1.2/twochartsmonth";
 import TwoChartsDay from "@/components/mainsite/layout_v1.2/twochartsday";
 import { ComparisonByFloor } from "@/components/mainsite/floor-compared";
+import { ComparisonByEquip } from "@/components/mainsite/equip-compared";
+import { Horizontal } from "@/components/mainsite/barhorizontal";
+
+import { DaySummary } from "@/types/energy";
 
 export default function Home() {
   const [time, setTime] = useState(new Date());
   const [index, setIndex] = useState(0);
+
+  /* ===== 今日サマリー ===== */
+  const [daySummary, setDaySummary] = useState<DaySummary | null>(null);
 
   /* ===== 時刻更新 ===== */
   useEffect(() => {
@@ -31,16 +38,7 @@ export default function Home() {
   /* ===== 共通ヘッダー ===== */
   const Header = ({ title }: { title: string }) => (
     <div>
-      <div
-        className="
-          flex items-center justify-between
-          px-6 py-2
-          bg-[#0b1220]
-          border border-cyan-400/30
-          rounded-lg
-          shadow-[0_0_20px_rgba(56,189,248,0.25)]
-        "
-      >
+      <div className="flex items-center justify-between px-6 py-2 bg-[#0b1220] border border-cyan-400/30 rounded-lg shadow-[0_0_20px_rgba(56,189,248,0.25)]">
         <div className="text-lg font-semibold tracking-widest text-white">
           {title}
         </div>
@@ -48,36 +46,28 @@ export default function Home() {
           {formatFull(time)}
         </div>
       </div>
-
-      {/* ネオンライン */}
       <div className="mt-2 h-[2px] bg-cyan-400/70 shadow-[0_0_12px_rgba(56,189,248,0.8)]" />
     </div>
   );
 
-  /* ===== スライド定義 ===== */
+  /* ===== スライド ===== */
   const slides: React.ReactNode[] = [
     /* ===== 1枚目：今月 ===== */
     <div className="flex flex-col h-full gap-4">
-      <Header title="4F - 今月のエネルギー消費量データ" />
-
+      <Header title="1F - 今月のエネルギー消費量データ" />
       <div className="grid grid-cols-12 gap-4 flex-1 min-h-0">
-        {/* 左 */}
         <div className="col-span-4 grid gap-4">
           <GridPanel title="今月の総消費電力量" value="0 kWh" />
-
           <div className="grid grid-cols-2 gap-4">
             <GridPanel title="今月の平均消費電力量" value="0 kW" />
             <GridPanel title="今月の最大消費電力量" value="0 kW" />
             <GridPanel title="CO2排出量" value="0 kg" />
-            <GridPanel title="最新更新日時" value="No Data" />
+            <GridPanel title="最終更新日時" value="No Data" />
           </div>
-
           <GridPanel title="階別消費電力量割合">
             <ComparisonByFloor />
           </GridPanel>
         </div>
-
-        {/* 右 */}
         <div className="col-span-8 min-h-0">
           <TwoCharts />
         </div>
@@ -86,98 +76,111 @@ export default function Home() {
 
     /* ===== 2枚目：今日 ===== */
     <div className="flex flex-col h-full gap-4">
-      <Header title="4F - 今日のエネルギー消費量データ" />
-
+      <Header title="1F - 今日のエネルギー消費量データ" />
       <div className="grid grid-cols-12 gap-4 flex-1 min-h-0">
-        {/* 左 */}
         <div className="col-span-4 grid gap-4">
-          <GridPanel title="今日の総消費電力量" value="0 kWh" />
-
+          <GridPanel
+            title="今日の総エネルギー消費量"
+            value={daySummary ? `${daySummary.total.toFixed(0)} kWh` : "--"}
+          />
           <div className="grid grid-cols-2 gap-4">
-            <GridPanel title="今日の平均消費電力量" value="0 kW" />
-            <GridPanel title="今日の最大消費電力量" value="0 kW" />
-            <GridPanel title="CO2排出量" value="0 kg" />
-            <GridPanel title="No Name" value="No Data" />
+            <GridPanel
+              title="今日の平均エネルギー消費量"
+              value={daySummary ? `${daySummary.average.toFixed(1)} kW` : "--"}
+            />
+            <GridPanel
+              title="今日の最大エネルギー消費量"
+              value={daySummary ? `${daySummary.max.toFixed(0)} kW` : "--"}
+            />
+            <GridPanel
+              title="CO2排出量"
+              value={
+                daySummary
+                  ? `${(daySummary.total * 0.4).toFixed(1)} kg`
+                  : "--"
+              }
+            />
+            {/* CO2排出量計算 - 参照: https://policies.env.go.jp/earth/ghg-santeikohyo/files/calc/itiran_2023_rev4.pdf */}
+            <GridPanel
+              title="最終更新日時"
+              value="2026/01/01 23:59:59"
+            />
           </div>
-
           <GridPanel title="階別消費電力量割合">
             <ComparisonByFloor />
           </GridPanel>
         </div>
 
-        {/* 右 */}
         <div className="col-span-8 min-h-0">
-          <TwoChartsDay />
+          <TwoChartsDay onSummaryChange={setDaySummary} />
         </div>
       </div>
     </div>,
 
-    /* ===== 3枚目：部屋別（SVG） ===== */
+    /* ===== 3枚目：部屋別 ===== */
     <div className="flex flex-col h-full gap-4">
-      <Header title="4F - 部屋別エネルギー消費量" />
-
+      <Header title="1F - 部屋別エネルギー消費量" />
       <div className="grid grid-cols-12 gap-4 flex-1 min-h-0">
-        {/* 左 */}
-        <div className="col-span-4 grid grid gap-4">
-          <GridPanel title="Room A" value="-- kWh" />
-          <GridPanel title="Room B" value="-- kWh" />
-          <GridPanel title="Room C" value="-- kWh" />
-          <GridPanel title="Room D" value="-- kWh" />
+        <div className="col-span-4 grid gap-4">
+          <GridPanel title="101,102,103 照明" value="-- kWh" />
+          <GridPanel title="104,105,106 照明" value="-- kWh" />
+          <GridPanel title="107,108,109 照明" value="-- kWh" />
+          <GridPanel title="110,111,112 照明" value="-- kWh" />
         </div>
 
-        {/* ===== 中央 SVG（4カラム） ===== */}
-        <div
-          className="
-            col-span-4
-            flex items-center justify-center
-          "
-        >
+        <div className="col-span-4 flex items-center justify-center">
           <img
-            src="/floors/floor004.svg"
-            alt="Floor 4 Layout"
-            className="
-              w-full
-              h-full
-              max-w-[95%]
-              max-h-[95%]
-              object-contain
-            "
+            src="/floors/floor001.svg"
+            alt="Floor 1 Layout"
+            className="w-full h-full max-w-[95%] max-h-[95%] object-contain"
           />
         </div>
 
-
-        {/* 右 */}
         <div className="col-span-4 grid gap-4">
-          <GridPanel title="Room E" value="-- kWh" />
-          <GridPanel title="Room F" value="-- kWh" />
-          <GridPanel title="Room G" value="-- kWh" />
-          <GridPanel title="Room H" value="-- kWh" />
+          <GridPanel title="113,114,115 照明" value="-- kWh" />
+          <GridPanel title="エントランス 照明" value="-- kWh" />
+          <GridPanel title="廊下 照明" value="-- kWh" />
+          <GridPanel title="スポットライト 照明" value="-- kWh" />
+        </div>
+      </div>
+    </div>,
+
+    /* ===== 4枚目：用途別 ===== */
+    <div className="flex flex-col h-full gap-4">
+      <Header title="1F - 用途別エネルギー消費量" />
+      <div className="grid grid-cols-12 gap-4 flex-1 min-h-0">
+        <div className="col-span-4 grid gap-4 min-h-0">
+          <GridPanel title="最終更新日時" value="2026/01/01 23:59:59" />
+          <GridPanel title="合計エネルギー量" value="-- kWh" />
+          <GridPanel title="用途別消費割合">
+            <ComparisonByEquip />
+          </GridPanel>
+        </div>
+
+        <div className="col-span-8 flex flex-col gap-4 min-h-0">
+          <div className="flex-1 min-h-0">
+            <Horizontal />
+          </div>
+          <div className="h-[400px] p-3 rounded-xl bg-[#0f1b2d] border border-cyan-400/40 shadow-[0_0_16px_rgba(56,189,248,0.35)] text-white text-xs">
+            追加情報エリア（省エネ目標・基準比較・注意喚起）
+          </div>
         </div>
       </div>
     </div>,
   ];
 
-  /* ===== スライド切り替え ===== */
+  /* ===== スライド切替 ===== */
   useEffect(() => {
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % slides.length);
     }, 10000);
-
     return () => clearInterval(timer);
   }, [slides.length]);
 
   return (
     <main className="w-screen h-screen bg-[#0b1220] flex items-center justify-center">
       <div className="w-full h-full p-4">
-        <div
-          className="
-            relative
-            w-full h-full
-            aspect-video
-            bg-gradient-to-br from-[#0b1220] via-[#0f1b2d] to-[#0b1220]
-            overflow-hidden
-          "
-        >
+        <div className="relative w-full h-full aspect-video bg-gradient-to-br from-[#0b1220] via-[#0f1b2d] to-[#0b1220] overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={index}

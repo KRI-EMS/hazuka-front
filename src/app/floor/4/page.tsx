@@ -5,8 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import GridPanel from "@/components/mainsite/layout_v1.2/gridpanel";
 import TwoCharts from "@/components/mainsite/layout_v1.2/twochartsmonth";
-import TwoChartsDay from "@/components/mainsite/layout_v1.2/twochartsday";
 import { ComparisonByFloor } from "@/components/mainsite/floor-compared";
+import { ComparisonByEquip } from "@/components/mainsite/equip-compared";
+import { Horizontal } from "@/components/mainsite/barhorizontal";
+
 
 export default function Home() {
   const [time, setTime] = useState(new Date());
@@ -69,7 +71,7 @@ export default function Home() {
             <GridPanel title="今月の平均消費電力量" value="0 kW" />
             <GridPanel title="今月の最大消費電力量" value="0 kW" />
             <GridPanel title="CO2排出量" value="0 kg" />
-            <GridPanel title="最新更新日時" value="No Data" />
+            <GridPanel title="最終更新日時" value="No Data" />
           </div>
 
           <GridPanel title="階別消費電力量割合">
@@ -97,7 +99,7 @@ export default function Home() {
             <GridPanel title="今日の平均消費電力量" value="0 kW" />
             <GridPanel title="今日の最大消費電力量" value="0 kW" />
             <GridPanel title="CO2排出量" value="0 kg" />
-            <GridPanel title="No Name" value="No Data" />
+            <GridPanel title="最終更新日時" value="No Data" />
           </div>
 
           <GridPanel title="階別消費電力量割合">
@@ -107,7 +109,7 @@ export default function Home() {
 
         {/* 右 */}
         <div className="col-span-8 min-h-0">
-          <TwoChartsDay />
+          <TwoCharts />
         </div>
       </div>
     </div>,
@@ -119,10 +121,10 @@ export default function Home() {
       <div className="grid grid-cols-12 gap-4 flex-1 min-h-0">
         {/* 左 */}
         <div className="col-span-4 grid grid gap-4">
-          <GridPanel title="Room A" value="-- kWh" />
-          <GridPanel title="Room B" value="-- kWh" />
-          <GridPanel title="Room C" value="-- kWh" />
-          <GridPanel title="Room D" value="-- kWh" />
+          <GridPanel title="401,402,403 照明" value="-- kWh" />
+          <GridPanel title="404,405,406 照明" value="-- kWh" />
+          <GridPanel title="407,408,409 照明" value="-- kWh" />
+          <GridPanel title="410,411,412 照明" value="-- kWh" />
         </div>
 
         {/* ===== 中央 SVG（4カラム） ===== */}
@@ -148,13 +150,57 @@ export default function Home() {
 
         {/* 右 */}
         <div className="col-span-4 grid gap-4">
-          <GridPanel title="Room E" value="-- kWh" />
-          <GridPanel title="Room F" value="-- kWh" />
-          <GridPanel title="Room G" value="-- kWh" />
-          <GridPanel title="Room H" value="-- kWh" />
+          <GridPanel title="413,414,415 照明" value="-- kWh" />
+          <GridPanel title="コレクティブラウンジ 照明" value="-- kWh" />
+          <GridPanel title="廊下 照明" value="-- kWh" />
+          <GridPanel title="スポットライト 照明" value="-- kWh" />
         </div>
       </div>
     </div>,
+
+    /* ===== 4枚目：用途別エネルギー消費量（横棒） ===== */
+    <div className="flex flex-col h-full gap-4">
+    <Header title="4F - 用途別エネルギー消費量" />
+
+    <div className="grid grid-cols-12 gap-4 flex-1 min-h-0">
+        {/* ===== 左 ===== */}
+        <div className="col-span-4 grid gap-4 min-h-0">
+        <GridPanel title="最終更新日時" value="No Data" />
+        <GridPanel title="合計エネルギー量" value="-- kWh" />
+
+        {/* ▼ 円グラフ（ComparisonByFloor） */}
+        <GridPanel title="フロア別消費割合">
+            <ComparisonByEquip />
+        </GridPanel>
+        </div>
+
+        {/* ===== 右 ===== */}
+        <div className="col-span-8 flex flex-col gap-4 min-h-0">
+        {/* 横棒チャート */}
+        <div className="flex-1 min-h-0">
+            <Horizontal />
+        </div>
+
+        {/* ▼ 高さ可変の追加枠 */}
+        <div
+            className="
+            h-[400px]   /* ← ここを手動で調整 */
+            p-3
+            rounded-xl
+            bg-[#0f1b2d]
+            border border-cyan-400/40
+            shadow-[0_0_16px_rgba(56,189,248,0.35)]
+            text-white
+            text-xs
+            "
+        >
+            {/* 中身は後で自由に */}
+            追加情報エリア（例：注釈／指標／アラート）
+        </div>
+        </div>
+    </div>
+</div>,
+
   ];
 
   /* ===== スライド切り替え ===== */

@@ -1,0 +1,136 @@
+"use client"
+
+import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts"
+import { Card, CardContent } from "@/components/ui/card"
+import { ChartContainer } from "@/components/ui/chart"
+
+type Props = {
+  value: number // 0〜100の力率(%)
+}
+
+export function PowerFactorGaugeNeedle({ value }: Props) {
+  const chartData = [
+    {
+      name: "pf",
+      value,
+      fill: "var(--chart-1)",
+    },
+  ]
+
+  // 針の角度: 左端 180°, 右端 0°
+  const angle = 180 - (180 * value) / 100
+
+  return (
+    <Card className="flex flex-col">
+      <CardContent className="flex flex-1 items-center pb-0">
+        <ChartContainer
+          className="mx-auto aspect-square w-full max-w-[260px]"
+          config={{}}
+        >
+          <RadialBarChart
+            data={chartData}
+            startAngle={180}
+            endAngle={0}
+            innerRadius={70}
+            outerRadius={130}
+          >
+            {/* ***************************
+                中央テキスト (85.5% など)
+            **************************** */}
+            <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
+<Label
+  content={({ viewBox }) => {
+    // viewBox が正しい形かチェック
+    if (
+      !viewBox ||
+      typeof viewBox !== "object" ||
+      !("cx" in viewBox) ||
+      !("cy" in viewBox) ||
+      viewBox.cx == null ||
+      viewBox.cy == null
+    ) {
+      return null
+    }
+
+    const cx = viewBox.cx
+    const cy = viewBox.cy
+
+    const needleLength = 95
+
+    const angle = 180 - (180 * value) / 100
+    const rad = (angle * Math.PI) / 180
+
+    const x2 = cx + needleLength * Math.cos(rad)
+    const y2 = cy + needleLength * Math.sin(rad)
+
+    return (
+      <g>
+        <line
+          x1={cx}
+          y1={cy}
+          x2={x2}
+          y2={y2}
+          stroke="red"
+          strokeWidth={4}
+          strokeLinecap="round"
+        />
+        <circle cx={cx} cy={cy} r={6} fill="red" />
+      </g>
+    )
+  }}
+/>
+
+            </PolarRadiusAxis>
+
+            {/* *********************************
+                半円ゲージ (背景 + 実値)
+            ********************************** */}
+            <RadialBar
+              dataKey="value"
+              cornerRadius={8}
+              background
+              className="stroke-transparent"
+            />
+
+            {/* *********************************
+                針を追加する SVG カスタム要素
+            ********************************** */}
+            <Label
+              content={({ viewBox }) => {
+                if (!viewBox || !("cx" in viewBox)) return null
+                const cx = viewBox.cx
+                const cy = viewBox.cy
+
+                const needleLength = 95
+
+                // 角度をラジアンへ
+                const rad = (angle * Math.PI) / 180
+
+                const x2 = cx + needleLength * Math.cos(rad)
+                const y2 = cy + needleLength * Math.sin(rad)
+
+                return (
+                  <g>
+                    {/* 針 */}
+                    <line
+                      x1={cx}
+                      y1={cy}
+                      x2={x2}
+                      y2={y2}
+                      stroke="red"
+                      strokeWidth={4}
+                      strokeLinecap="round"
+                    />
+
+                    {/* 中央の丸 */}
+                    <circle cx={cx} cy={cy} r={6} fill="red" />
+                  </g>
+                )
+              }}
+            />
+          </RadialBarChart>
+        </ChartContainer>
+      </CardContent>
+    </Card>
+  )
+}
