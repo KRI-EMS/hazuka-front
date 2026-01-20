@@ -21,7 +21,7 @@ export default function Home() {
   const [daySummary, setDaySummary] = useState<DaySummary | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem("slideInterval_floor1");
+    const saved = localStorage.getItem("slideInterval_floor2");
     if (saved) {
       setIntervalMs(Number(saved) * 1000);
     }
@@ -62,7 +62,7 @@ export default function Home() {
   const slides: React.ReactNode[] = [
     /* ===== 1枚目：今月 ===== */
     <div className="flex flex-col h-full gap-4">
-      <Header title="1F - 今月のエネルギー消費量データ" />
+      <Header title="2F - 今月のエネルギー消費量データ" />
       <div className="grid grid-cols-12 gap-4 flex-1 min-h-0">
         <div className="col-span-4 grid gap-4">
           <GridPanel title="今月の総消費電力量" value="0 kWh" />
@@ -84,7 +84,7 @@ export default function Home() {
 
     /* ===== 2枚目：今日 ===== */
     <div className="flex flex-col h-full gap-4">
-      <Header title="1F - 今日のエネルギー消費量データ" />
+      <Header title="2F - 今日のエネルギー消費量データ" />
       <div className="grid grid-cols-12 gap-4 flex-1 min-h-0">
         <div className="col-span-4 grid gap-4">
           <GridPanel
@@ -170,7 +170,7 @@ export default function Home() {
             <Horizontal />
           </div>
           <div className="h-[400px] p-3 rounded-xl bg-[#0f1b2d] border border-cyan-400/40 shadow-[0_0_16px_rgba(56,189,248,0.35)] text-white text-xs">
-            
+            追加情報エリア（省エネ目標・基準比較・注意喚起）
           </div>
         </div>
       </div>

@@ -13,6 +13,14 @@ import { Horizontal } from "@/components/mainsite/barhorizontal";
 export default function Home() {
   const [time, setTime] = useState(new Date());
   const [index, setIndex] = useState(0);
+  const [intervalMs, setIntervalMs] = useState(10000);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("slideInterval_floor4");
+    if (saved) {
+      setIntervalMs(Number(saved) * 1000);
+    }
+  }, []);
 
   /* ===== 時刻更新 ===== */
   useEffect(() => {
@@ -207,10 +215,9 @@ export default function Home() {
   useEffect(() => {
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % slides.length);
-    }, 10000);
-
+    }, intervalMs);
     return () => clearInterval(timer);
-  }, [slides.length]);
+  }, [slides.length, intervalMs]);
 
   return (
     <main className="w-screen h-screen bg-[#0b1220] flex items-center justify-center">
