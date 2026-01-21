@@ -1,6 +1,6 @@
 "use client"
 
-import { Pie, PieChart } from "recharts"
+import { Pie, PieChart, Label } from "recharts"
 import {
   ChartConfig,
   ChartContainer,
@@ -10,11 +10,11 @@ import {
 
 /* ===== データ：設備用途別 ===== */
 const chartData = [
-  { equip: "室内照明", visitors: 45, fill: "#7dd3fc" }, // 少し薄い水色
-  { equip: "廊下等照明", visitors: 20, fill: "#fb923c" }, // オレンジ
-  { equip: "空調", visitors: 10, fill: "#a3e635" }, // 黄緑
-  { equip: "換気", visitors: 15, fill: "#9ca3af" }, // グレー
-  { equip: "その他", visitors: 10, fill: "#6b7280" }, // 濃いグレー
+  { equip: "室内照明", visitors: 45, fill: "#7dd3fc" },
+  { equip: "廊下等照明", visitors: 20, fill: "#fb923c" },
+  { equip: "空調", visitors: 10, fill: "#a3e635" },
+  { equip: "換気", visitors: 15, fill: "#9ca3af" },
+  { equip: "その他", visitors: 10, fill: "#6b7280" },
 ]
 
 /* ===== ChartConfig ===== */
@@ -45,6 +45,7 @@ export function ComparisonByEquip() {
                   />
                 }
               />
+
               <Pie
                 data={chartData}
                 dataKey="visitors"
@@ -52,7 +53,34 @@ export function ComparisonByEquip() {
                 innerRadius={50}
                 outerRadius={90}
                 paddingAngle={2}
-              />
+                labelLine={false}
+                label={({ cx, cy, midAngle, innerRadius, outerRadius, value }) => {
+                  const RADIAN = Math.PI / 180
+                  const radius =
+                    innerRadius + (outerRadius - innerRadius) * 0.6
+                  const x = cx + radius * Math.cos(-midAngle * RADIAN)
+                  const y = cy + radius * Math.sin(-midAngle * RADIAN)
+
+                  return (
+                    <text
+                      x={x}
+                      y={y}
+                      textAnchor="middle"
+                      dominantBaseline="central"
+                      className="fill-white text-xs font-medium"
+                    >
+                      {value}
+                    </text>
+                  )
+                }}
+              >
+                {/* 円の中心に単位のみ表示 */}
+                <Label
+                  value="kWh"
+                  position="center"
+                  className="fill-slate-400 text-xs"
+                />
+              </Pie>
             </PieChart>
           </div>
 

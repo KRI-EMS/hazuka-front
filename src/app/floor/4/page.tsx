@@ -192,7 +192,7 @@ export default function Home() {
         {/* ▼ 高さ可変の追加枠 */}
         <div
             className="
-            h-[400px]   /* ← ここを手動で調整 */
+            h-[300px]   /* ← ここを手動で調整 */
             p-3
             rounded-xl
             bg-[#0f1b2d]

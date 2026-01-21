@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ChartMixedDay } from "@/components/mainsite/day-trantision";
-import { ChartBarStackedMonth } from "@/components/mainsite/barstackedmonth";
+import { ChartBarStackedDay } from "@/components/mainsite/barstackedday";
 import { DaySummary } from "@/types/energy";
 
 function ChartPanel({ title, children }: { title: string; children: React.ReactNode }) {
@@ -36,7 +36,7 @@ export default function TwoChartsDay({ onSummaryChange }: Props) {
         </ChartPanel>
       ) : (
         <ChartPanel title="日次比較チャート">
-          <ChartBarStackedMonth />
+          <ChartBarStackedDay />
         </ChartPanel>
       )}
     </div>

@@ -1,7 +1,7 @@
 "use client"
 
 import { TrendingUp } from "lucide-react"
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
 
 import {
   Card,
@@ -59,20 +59,20 @@ const chartData = [
 
 const chartConfig = {
   energy: {
-    label: "Energy",
-    color: "var(--chart-1)",
+    label: "照明",
+    color: "#60a5fa",
   },
   gas: {
-    label: "Gas",
-    color: "var(--chart-2)",
+    label: "ガス",
+    color: "#f97316",
   },
   ghp: {
-    label: "Ghp",
-    color: "var(--chart-3)",
+    label: "空調",
+    color: "#84cc16",
   },
   other: {
-    label: "Other",
-    color: "var(--chart-4)",
+    label: "その他",
+    color: "#9ca3af",
   },
 } satisfies ChartConfig
 
@@ -82,34 +82,41 @@ export function ChartBarStackedMonth() {
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="datetime"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
+              interval={2}
+              tickFormatter={(value) => `Day ${Number(value.slice(6, 8))}`}
+            />
+
+            <YAxis
+              tickFormatter={(value) => `${value} kWh`}
+              tickLine={false}
+              axisLine={false}  
             />
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
             <ChartLegend content={<ChartLegendContent />} />
             <Bar
               dataKey="energy"
               stackId="a"
-              fill="var(--color-blue-700)"
+              fill="#60a5fa"
               radius={[0, 0, 4, 4]}
             />
             <Bar
               dataKey="gas"
               stackId="a"
-              fill="var(--color-blue-500)"
+              fill="#f97316"
             />
             <Bar
               dataKey="ghp"
               stackId="a"
-              fill="var(--color-blue-300)"
+              fill="#84cc16"
             />
             <Bar
               dataKey="other"
               stackId="a"
-              fill="var(--color-blue-100)"
+              fill="#9ca3af"
               radius={[4, 4, 0, 0]}
             />
           </BarChart>
