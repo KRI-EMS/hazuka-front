@@ -19,7 +19,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-const API = process.env.NEXT_PUBLIC_API_URL;
+// const API = process.env.NEXT_PUBLIC_API_URL;
 
 interface EnergyItem {
   day: string;
@@ -43,6 +43,8 @@ export function ChartMixedMonth() {
   const [chartData, setChartData] = useState<ComparisonItem[]>([]);
 
   useEffect(() => {
+    // ---- API データ取得部分をコメントアウト ----
+    /*
     const fetchData = async () => {
       const currentMonth = "2025-07";
       const previousMonth = "2025-06";
@@ -75,6 +77,24 @@ export function ChartMixedMonth() {
     };
 
     fetchData();
+    */
+
+    // ---- ダミーデータを作成 ----
+    const dummyData: ComparisonItem[] = Array.from({ length: 30 }, (_, i) => {
+      const day = (i + 1).toString().padStart(2, "0");
+      const current = Math.floor(1000 + Math.random() * 800); // 今月
+      const previous = Math.floor(900 + Math.random() * 700); // 前月
+      const ratio = previous === 0 ? 0 : (current - previous) / previous;
+
+      return {
+        date: `2025-07-${day}`,
+        current,
+        previous,
+        ratio
+      };
+    });
+
+    setChartData(dummyData);
   }, []);
 
   return (
@@ -101,9 +121,16 @@ export function ChartMixedMonth() {
           tickLine={false}
           axisLine={false}
           tickMargin={8}
-          minTickGap={32}
-          interval={2}
+          interval={0} 
+          tickFormatter={(value, index) => {
+            if (index % 3 === 0) {
+              const day = value.slice(-2).replace(/^0/, ""); 
+              return `Day${day}`;
+            }
+            return "";
+          }}
         />
+
 
         <YAxis
           yAxisId={1}

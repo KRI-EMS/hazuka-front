@@ -41,11 +41,11 @@ export default function TwoCharts() {
   return (
     <div className="w-full h-full">
       {index === 0 ? (
-        <ChartPanel title="月次比較チャート">
+        <ChartPanel title="今月,前月の日別総消費エネルギー量と推移">
           <ChartMixedMonth />
         </ChartPanel>
       ) : (
-        <ChartPanel title="日次比較チャート">
+        <ChartPanel title="設備別・今月の消費エネルギー量">
           <ChartBarStackedMonth />
         </ChartPanel>
       )}

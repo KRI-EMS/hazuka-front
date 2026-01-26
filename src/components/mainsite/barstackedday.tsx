@@ -70,7 +70,7 @@ const chartConfig = {
 
 export function ChartBarStackedDay() {
   return (
-    <ChartContainer config={chartConfig} className="text-white">
+    <ChartContainer config={chartConfig} className="text-white w-full h-full pt-4">
       <BarChart accessibilityLayer data={chartData}>
         <CartesianGrid vertical={false} />
 

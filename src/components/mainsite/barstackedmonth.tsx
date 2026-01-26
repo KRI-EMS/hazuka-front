@@ -78,7 +78,7 @@ const chartConfig = {
 
 export function ChartBarStackedMonth() {
   return (
-        <ChartContainer config={chartConfig} className="text-white">
+        <ChartContainer config={chartConfig} className="text-white w-full h-full pt-4">
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis

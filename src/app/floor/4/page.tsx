@@ -8,12 +8,25 @@ import TwoCharts from "@/components/mainsite/layout_v1.2/twochartsmonth";
 import { ComparisonByFloor } from "@/components/mainsite/floor-compared";
 import { ComparisonByEquip } from "@/components/mainsite/equip-compared";
 import { Horizontal } from "@/components/mainsite/barhorizontal";
+import TwoChartsDay from "@/components/mainsite/layout_v1.2/twochartsday";
 
 
 export default function Home() {
   const [time, setTime] = useState(new Date());
   const [index, setIndex] = useState(0);
   const [intervalMs, setIntervalMs] = useState(10000);
+  const [statusValue] = useState(118); 
+
+  const statusInfo = (() => {
+    if (statusValue <= 70) {
+      return { label: "良好", color: "text-green-400" };
+    }
+    if (statusValue <= 100) {
+      return { label: "注意", color: "text-yellow-400" };
+    }
+    return { label: "危険", color: "text-red-500" };
+  })();
+
 
   useEffect(() => {
     const saved = localStorage.getItem("slideInterval_floor4");
@@ -117,22 +130,22 @@ export default function Home() {
 
         {/* 右 */}
         <div className="col-span-8 min-h-0">
-          <TwoCharts />
+          <TwoChartsDay />
         </div>
       </div>
     </div>,
 
     /* ===== 3枚目：部屋別（SVG） ===== */
-    <div className="flex flex-col h-full gap-4">
+    <div className="flex flex-col h-full gap-4 relative">
       <Header title="4F - 部屋別エネルギー消費量" />
 
       <div className="grid grid-cols-12 gap-4 flex-1 min-h-0">
         {/* 左 */}
         <div className="col-span-4 grid grid gap-4">
-          <GridPanel title="401,402,403 照明" value="-- kWh" />
-          <GridPanel title="404,405,406 照明" value="-- kWh" />
-          <GridPanel title="407,408,409 照明" value="-- kWh" />
-          <GridPanel title="410,411,412 照明" value="-- kWh" />
+          <GridPanel title="401,402,403 照明" value="-- kWh" className="w-[300px]"/>
+          <GridPanel title="404,405,406 照明" value="-- kWh" className="w-[300px]"/>
+          <GridPanel title="407,408,409 照明" value="-- kWh" className="w-[300px]"/>
+          <GridPanel title="410,411,412 照明" value="-- kWh" className="w-[300px]"/>
         </div>
 
         {/* ===== 中央 SVG（4カラム） ===== */}
@@ -145,23 +158,17 @@ export default function Home() {
           <img
             src="/floors/floor004.svg"
             alt="Floor 4 Layout"
-            className="
-              w-full
-              h-full
-              max-w-[95%]
-              max-h-[95%]
-              object-contain
-            "
+            className="absolute inset-0 object-contain pointer-events-none max-w-[60%] max-h-[60%] m-auto"
           />
         </div>
 
 
         {/* 右 */}
-        <div className="col-span-4 grid gap-4">
-          <GridPanel title="413,414,415 照明" value="-- kWh" />
-          <GridPanel title="コレクティブラウンジ 照明" value="-- kWh" />
-          <GridPanel title="廊下 照明" value="-- kWh" />
-          <GridPanel title="スポットライト 照明" value="-- kWh" />
+        <div className="col-span-4 grid gap-4 justify-self-end">
+          <GridPanel title="413,414,415 照明" value="-- kWh" className="w-[300px]"/>
+          <GridPanel title="コレクティブラウンジ 照明" value="-- kWh" className="w-[300px]"/>
+          <GridPanel title="廊下 照明" value="-- kWh" className="w-[300px]"/>
+          <GridPanel title="スポットライト 照明" value="-- kWh" className="w-[300px]"/>
         </div>
       </div>
     </div>,
@@ -192,18 +199,47 @@ export default function Home() {
         {/* ▼ 高さ可変の追加枠 */}
         <div
             className="
-            h-[300px]   /* ← ここを手動で調整 */
-            p-3
-            rounded-xl
-            bg-[#0f1b2d]
-            border border-cyan-400/40
-            shadow-[0_0_16px_rgba(56,189,248,0.35)]
-            text-white
-            text-xs
+              h-[300px]
+              p-3
+              rounded-xl
+              bg-[#0f1b2d]
+              border border-cyan-400/40
+              shadow-[0_0_16px_rgba(56,189,248,0.35)]
+              text-white
+              text-xs
+              flex flex-col justify-center
+              gap-6
             "
+            style={{
+              "--title-size": "30px",
+              "--status-size": "60px",
+              "--desc-size": "12px",
+            } as React.CSSProperties}
         >
-            {/* 中身は後で自由に */}
-            追加情報エリア（例：注釈／指標／アラート）
+          {/* ===== 追加情報エリア中身 ===== */}
+
+          {/* 題名 */}
+          <div className="text-center text-white mb-2 font-semibold" style={{ fontSize: "var(--title-size)" }}>
+            システム稼働状況
+          </div>
+
+          {/* ステータス行 */}
+          <div className="flex justify-center items-center gap-8 mb-3">
+            <span className="text-white text-[var(--status-size)]" style={{ fontSize: "var(--status-size)" }}>
+              {statusValue}%
+            </span>
+
+            <span className={`${statusInfo.color} font-medium`} style={{ fontSize: "var(--status-size)" }}>
+              {statusInfo.label}
+            </span>
+          </div>
+
+          {/* 説明文 */}
+          <div className="text-center text-white/60 text-[var(--desc-size)] leading-relaxed" style={{ fontSize: "var(--desc-size)" }}>
+            ※ 0~70% - 良好, 71%~100% - 注意, 101%~ - 危険
+            
+          </div>
+
         </div>
         </div>
     </div>

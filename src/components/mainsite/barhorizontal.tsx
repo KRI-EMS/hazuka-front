@@ -18,7 +18,7 @@ import {
 
 /* ===== データ（要素数：3） ===== */
 const chartData = [
-  { name: "4F", value: 220 },
+  { name: "現フロア", value: 220 },
   { name: "全フロア合計（現在）", value: 900 },
   { name: "全フロア合計（目標）", value: 760 },
 ]
@@ -51,7 +51,7 @@ export function Horizontal() {
       <div className="flex-1">
         <ChartContainer
           config={chartConfig}
-          className="w-full max-h-[160px] text-white"
+          className="w-full max-h-[280px] text-white"
         >
           <BarChart
             data={chartData}
