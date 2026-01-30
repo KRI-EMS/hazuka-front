@@ -168,7 +168,7 @@ export default function Home() {
           <GridPanel title="108,109 照明" value="-- kWh" className="w-[300px]"/>
           <GridPanel title="エントランスホール 照明" value="-- kWh" className="w-[300px]"/>
           <GridPanel title="廊下 照明" value="-- kWh" className="w-[300px]"/>
-          <GridPanel title="準備室,WC,給湯 照明" value="-- kWh" className="w-[300px]"/>
+          <GridPanel title="準備室,WC,給湯室 照明" value="-- kWh" className="w-[300px]"/>
         </div>
       </div>
     </div>,

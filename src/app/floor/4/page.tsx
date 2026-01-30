@@ -86,13 +86,13 @@ export default function Home() {
       <div className="grid grid-cols-12 gap-4 flex-1 min-h-0">
         {/* 左 */}
         <div className="col-span-4 grid gap-4">
-          <GridPanel title="今月の総消費電力量" value="0 kWh" />
+          <GridPanel title="今月の総消費電力量" value="48,299 kWh" />
 
           <div className="grid grid-cols-2 gap-4">
-            <GridPanel title="今月の平均消費電力量" value="0 kW" />
-            <GridPanel title="今月の最大消費電力量" value="0 kW" />
-            <GridPanel title="CO2排出量" value="0 kg" />
-            <GridPanel title="最終更新日時" value="No Data" />
+            <GridPanel title="今月の平均消費電力量" value="1,252 kW" />
+            <GridPanel title="今月の最大消費電力量" value="1,562 kW" />
+            <GridPanel title="CO2排出量" value="44,725 kg" />
+            <GridPanel title="最終更新日時" value="2025/12/31 23:59:59" />
           </div>
 
           <GridPanel title="階別消費電力量割合">
@@ -114,13 +114,13 @@ export default function Home() {
       <div className="grid grid-cols-12 gap-4 flex-1 min-h-0">
         {/* 左 */}
         <div className="col-span-4 grid gap-4">
-          <GridPanel title="今日の総消費電力量" value="0 kWh" />
+          <GridPanel title="今日の総消費電力量" value="3,044 kWh" />
 
           <div className="grid grid-cols-2 gap-4">
-            <GridPanel title="今日の平均消費電力量" value="0 kW" />
-            <GridPanel title="今日の最大消費電力量" value="0 kW" />
-            <GridPanel title="CO2排出量" value="0 kg" />
-            <GridPanel title="最終更新日時" value="No Data" />
+            <GridPanel title="今日の平均消費電力量" value="108 kW" />
+            <GridPanel title="今日の最大消費電力量" value="128 kW" />
+            <GridPanel title="CO2排出量" value="1,288 kg" />
+            <GridPanel title="最終更新日時" value="2025/12/31 23:59:59" />
           </div>
 
           <GridPanel title="階別消費電力量割合">
@@ -137,15 +137,15 @@ export default function Home() {
 
     /* ===== 3枚目：部屋別（SVG） ===== */
     <div className="flex flex-col h-full gap-4 relative">
-      <Header title="4F - 部屋別エネルギー消費量" />
+      <Header title="4F - 区域別エネルギー消費量" />
 
       <div className="grid grid-cols-12 gap-4 flex-1 min-h-0">
         {/* 左 */}
         <div className="col-span-4 grid grid gap-4">
-          <GridPanel title="401,402,403 照明" value="-- kWh" className="w-[300px]"/>
-          <GridPanel title="404,405,406 照明" value="-- kWh" className="w-[300px]"/>
-          <GridPanel title="407,408,409 照明" value="-- kWh" className="w-[300px]"/>
-          <GridPanel title="410,411,412 照明" value="-- kWh" className="w-[300px]"/>
+          <GridPanel title="401,402,403 照明" value="0.0 kWh" className="w-[300px]"/>
+          <GridPanel title="404,405,406 照明" value="9.6 kWh" className="w-[300px]"/>
+          <GridPanel title="407,408,409 照明" value="42.2 kWh" className="w-[300px]"/>
+          <GridPanel title="410,411,412 照明" value="45.2 kWh" className="w-[300px]"/>
         </div>
 
         {/* ===== 中央 SVG（4カラム） ===== */}
@@ -165,10 +165,10 @@ export default function Home() {
 
         {/* 右 */}
         <div className="col-span-4 grid gap-4 justify-self-end">
-          <GridPanel title="413,414,415 照明" value="-- kWh" className="w-[300px]"/>
-          <GridPanel title="コレクティブラウンジ 照明" value="-- kWh" className="w-[300px]"/>
-          <GridPanel title="廊下 照明" value="-- kWh" className="w-[300px]"/>
-          <GridPanel title="スポットライト 照明" value="-- kWh" className="w-[300px]"/>
+          <GridPanel title="413,414,415 照明" value="0.0 kWh" className="w-[300px]"/>
+          <GridPanel title="コレクティブラウンジ 照明" value="67.8 kWh" className="w-[300px]"/>
+          <GridPanel title="廊下 照明" value="14.0 kWh" className="w-[300px]"/>
+          <GridPanel title="スポットライト 照明" value="0.0 kWh" className="w-[300px]"/>
         </div>
       </div>
     </div>,
@@ -180,8 +180,8 @@ export default function Home() {
     <div className="grid grid-cols-12 gap-4 flex-1 min-h-0">
         {/* ===== 左 ===== */}
         <div className="col-span-4 grid gap-4 min-h-0">
-        <GridPanel title="最終更新日時" value="No Data" />
-        <GridPanel title="合計エネルギー量" value="-- kWh" />
+        <GridPanel title="最終更新日時" value="2025/12/31 23:59:59" />
+        <GridPanel title="合計エネルギー量" value="900 kWh" />
 
         {/* ▼ 円グラフ（ComparisonByFloor） */}
         <GridPanel title="フロア別消費割合">
@@ -220,7 +220,7 @@ export default function Home() {
 
           {/* 題名 */}
           <div className="text-center text-white mb-2 font-semibold" style={{ fontSize: "var(--title-size)" }}>
-            システム稼働状況
+            目標値と比較したシステム稼働状況
           </div>
 
           {/* ステータス行 */}
@@ -236,7 +236,7 @@ export default function Home() {
 
           {/* 説明文 */}
           <div className="text-center text-white/60 text-[var(--desc-size)] leading-relaxed" style={{ fontSize: "var(--desc-size)" }}>
-            ※ 0~70% - 良好, 71%~100% - 注意, 101%~ - 危険
+            ※ 0~70% - 良好, 71%~100% - 注意, 101%~ - 危険      ※ 目標値は手入力,最終更新日 12/31
             
           </div>
 

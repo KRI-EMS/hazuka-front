@@ -9,13 +9,13 @@ import {
 } from "@/components/ui/chart"
 
 const chartData = [
-  { floor: "1F", visitors: 100, fill: "var(--color-blue-900)" },
-  { floor: "2F", visitors: 90, fill: "var(--color-blue-800)" },
-  { floor: "3F", visitors: 80, fill: "var(--color-blue-700)" },
-  { floor: "4F", visitors: 70, fill: "var(--color-blue-600)" },
-  { floor: "5F", visitors: 60, fill: "var(--color-blue-500)" },
-  { floor: "6F", visitors: 50, fill: "var(--color-blue-400)" },
-  { floor: "7F", visitors: 40, fill: "var(--color-blue-300)" },
+  { floor: "1F", visitors: 412, fill: "var(--color-blue-900)" },
+  { floor: "2F", visitors: 365, fill: "var(--color-blue-800)" },
+  { floor: "3F", visitors: 587, fill: "var(--color-blue-700)" },
+  { floor: "4F", visitors: 431, fill: "var(--color-blue-600)" },
+  { floor: "5F", visitors: 298, fill: "var(--color-blue-500)" },
+  { floor: "6F", visitors: 476, fill: "var(--color-blue-400)" },
+  { floor: "7F", visitors: 475, fill: "var(--color-blue-300)" },
 ]
 
 const chartConfig = {
